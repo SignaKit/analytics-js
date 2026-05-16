@@ -1,0 +1,44 @@
+{
+  "name": "@signakit/analytics-js",
+  "version": "1.0.0",
+  "description": "Privacy-first, cookieless browser analytics SDK",
+  "license": "MIT",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf dist *.tsbuildinfo",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@signakit/analytics-core": "workspace:*"
+  },
+  "peerDependencies": {
+    "web-vitals": "^4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "web-vitals": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^4.1.6",
+    "jsdom": "^29.1.1",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.3",
+    "web-vitals": "^4.2.4"
+  }
+}
