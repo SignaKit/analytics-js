@@ -3,6 +3,11 @@
   "version": "1.1.0",
   "description": "Privacy-first, cookieless browser analytics SDK",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SignaKit/analytics-js.git",
+    "directory": "packages/browser"
+  },
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
