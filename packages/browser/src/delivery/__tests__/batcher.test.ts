@@ -12,7 +12,7 @@ const makeEvent = (id = '1'): RawEvent =>
   ({ event_id: id, event_name: 'test' }) as unknown as RawEvent
 
 const makeOptions = (overrides = {}) => ({
-  endpoint: 'https://ingest.example.com/v1/analytics',
+  endpoint: 'https://60amq9ozsf.execute-api.us-east-2.amazonaws.com/v1/analytics',
   apiKey: 'ska_test',
   batchSize: 2,
   flushInterval: 100,
@@ -77,7 +77,11 @@ describe('EventBatcher', () => {
     const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
     const batcher = new EventBatcher(makeOptions({ debug: true }))
     batcher.push(makeEvent('dbg'))
-    expect(consoleSpy).toHaveBeenCalledWith('[SignaKit]', 'test', expect.objectContaining({ event_id: 'dbg' }))
+    expect(consoleSpy).toHaveBeenCalledWith(
+      '[SignaKit]',
+      'test',
+      expect.objectContaining({ event_id: 'dbg' })
+    )
     consoleSpy.mockRestore()
   })
 })

@@ -2,7 +2,7 @@ import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest'
 import { sendBatch } from '../transport'
 import type { RawEvent } from '@signakit/analytics-core'
 
-const ENDPOINT = 'https://ingest.example.com/v1/analytics'
+const ENDPOINT = 'https://60amq9ozsf.execute-api.us-east-2.amazonaws.com/v1/analytics'
 const API_KEY = 'ska_test'
 const EVENTS = [{ event_id: '1', event_name: 'test' }] as unknown as RawEvent[]
 
