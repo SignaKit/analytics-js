@@ -19,7 +19,7 @@ import { version } from '../package.json'
 
 const SDK_NAME = 'analytics-js'
 const SDK_VERSION = version
-const DEFAULT_ENDPOINT = 'https://ingest.signakit.com/v1/analytics'
+const DEFAULT_ENDPOINT = 'https://60amq9ozsf.execute-api.us-east-2.amazonaws.com/v1/analytics'
 
 export class SignakitClient {
   private readonly config: Required<SignakitAnalyticsConfig> & { apiKey: string }

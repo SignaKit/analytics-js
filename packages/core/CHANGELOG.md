@@ -1,5 +1,11 @@
 # @signakit/analytics-core
 
+## 1.2.0
+
+### Minor Changes
+
+- fix analytics endpoint
+
 ## 1.1.0
 
 ### Minor Changes
