@@ -5,6 +5,7 @@ const RETRY_DELAYS = [1000, 2000, 4000]
 export async function sendBatch(
   events: RawEvent[],
   endpoint: string,
+  apiKey: string,
   useBeacon = false
 ): Promise<boolean> {
   const body = JSON.stringify({ events })
@@ -17,7 +18,7 @@ export async function sendBatch(
     try {
       const res = await fetch(endpoint, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey },
         body,
         keepalive: true,
       })
