@@ -13,6 +13,7 @@ const makeEvent = (id = '1'): RawEvent =>
 
 const makeOptions = (overrides = {}) => ({
   endpoint: 'https://ingest.example.com/v1/analytics',
+  apiKey: 'ska_test',
   batchSize: 2,
   flushInterval: 100,
   debug: false,
@@ -39,6 +40,7 @@ describe('EventBatcher', () => {
       expect(sendBatch).toHaveBeenCalledWith(
         [expect.objectContaining({ event_id: '1' })],
         makeOptions().endpoint,
+        makeOptions().apiKey,
         false
       )
     })

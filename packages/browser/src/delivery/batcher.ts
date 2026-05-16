@@ -4,6 +4,7 @@ import { OfflineQueue } from './offline'
 
 interface BatcherOptions {
   endpoint: string
+  apiKey: string
   batchSize: number
   flushInterval: number
   debug: boolean
@@ -40,7 +41,7 @@ export class EventBatcher {
   async flush(useBeacon = false): Promise<void> {
     if (this.queue.length === 0) return
     const batch = this.queue.splice(0)
-    const success = await sendBatch(batch, this.options.endpoint, useBeacon)
+    const success = await sendBatch(batch, this.options.endpoint, this.options.apiKey, useBeacon)
     if (!success) {
       this.offline.push(batch)
     }
@@ -49,7 +50,7 @@ export class EventBatcher {
   async replayOffline(): Promise<void> {
     const queued = this.offline.drain()
     if (queued.length === 0) return
-    const success = await sendBatch(queued, this.options.endpoint)
+    const success = await sendBatch(queued, this.options.endpoint, this.options.apiKey)
     if (!success) {
       this.offline.push(queued)
     }

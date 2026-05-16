@@ -3,6 +3,7 @@ import { sendBatch } from '../transport'
 import type { RawEvent } from '@signakit/analytics-core'
 
 const ENDPOINT = 'https://ingest.example.com/v1/analytics'
+const API_KEY = 'ska_test'
 const EVENTS = [{ event_id: '1', event_name: 'test' }] as unknown as RawEvent[]
 
 beforeEach(() => {
@@ -19,7 +20,7 @@ describe('sendBatch', () => {
     const mockFetch = vi.fn().mockResolvedValue({ ok: true, status: 200 })
     vi.stubGlobal('fetch', mockFetch)
 
-    const promise = sendBatch(EVENTS, ENDPOINT)
+    const promise = sendBatch(EVENTS, ENDPOINT, API_KEY)
     await vi.runAllTimersAsync()
     await promise
 
@@ -27,7 +28,7 @@ describe('sendBatch', () => {
       ENDPOINT,
       expect.objectContaining({
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'x-api-key': API_KEY },
         body: JSON.stringify({ events: EVENTS }),
       })
     )
@@ -35,7 +36,7 @@ describe('sendBatch', () => {
 
   it('returns true on 200 response', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true, status: 200 }))
-    const promise = sendBatch(EVENTS, ENDPOINT)
+    const promise = sendBatch(EVENTS, ENDPOINT, API_KEY)
     await vi.runAllTimersAsync()
     expect(await promise).toBe(true)
   })
@@ -43,7 +44,7 @@ describe('sendBatch', () => {
   it('returns false on 400 response (no retry)', async () => {
     const mockFetch = vi.fn().mockResolvedValue({ ok: false, status: 400 })
     vi.stubGlobal('fetch', mockFetch)
-    const promise = sendBatch(EVENTS, ENDPOINT)
+    const promise = sendBatch(EVENTS, ENDPOINT, API_KEY)
     await vi.runAllTimersAsync()
     expect(await promise).toBe(false)
     expect(mockFetch).toHaveBeenCalledTimes(1)
@@ -52,7 +53,7 @@ describe('sendBatch', () => {
   it('retries on 500 response — fetch called 3 times, returns false', async () => {
     const mockFetch = vi.fn().mockResolvedValue({ ok: false, status: 500 })
     vi.stubGlobal('fetch', mockFetch)
-    const promise = sendBatch(EVENTS, ENDPOINT)
+    const promise = sendBatch(EVENTS, ENDPOINT, API_KEY)
     await vi.runAllTimersAsync()
     expect(await promise).toBe(false)
     expect(mockFetch).toHaveBeenCalledTimes(3)
@@ -61,7 +62,7 @@ describe('sendBatch', () => {
   it('uses sendBeacon when useBeacon=true and returns its result', async () => {
     const mockBeacon = vi.fn().mockReturnValue(true)
     vi.stubGlobal('navigator', { ...navigator, sendBeacon: mockBeacon })
-    const result = await sendBatch(EVENTS, ENDPOINT, true)
+    const result = await sendBatch(EVENTS, ENDPOINT, API_KEY, true)
     expect(mockBeacon).toHaveBeenCalledOnce()
     expect(result).toBe(true)
   })
@@ -70,7 +71,7 @@ describe('sendBatch', () => {
     vi.stubGlobal('navigator', { ...navigator, sendBeacon: undefined })
     const mockFetch = vi.fn().mockRejectedValue(new Error('network error'))
     vi.stubGlobal('fetch', mockFetch)
-    const promise = sendBatch(EVENTS, ENDPOINT, true)
+    const promise = sendBatch(EVENTS, ENDPOINT, API_KEY, true)
     await vi.runAllTimersAsync()
     expect(await promise).toBe(false)
     expect(mockFetch).toHaveBeenCalledTimes(3)
